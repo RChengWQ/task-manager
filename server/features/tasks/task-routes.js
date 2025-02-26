@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { createTask, deleteTask, moveTask} = require('task-controller');
 
-router.post('/', createTask);
-router.delete('/taskId', deleteTask);
-router.put('/taskId/move/listId', moveTask);
+router.post('/tasks', createTask);
+router.delete('/tasks/:taskId', deleteTask);
+router.put('/tasks/:taskId/move/:listId', moveTask);
 
 module.exports = router();
