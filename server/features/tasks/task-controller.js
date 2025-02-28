@@ -16,15 +16,46 @@ exports.deleteTask = async (req, res) => {
 
 exports.moveTask = async (req, res) => {
     const { taskId } = req.params.taskId;
-    const { listId } = req.params.listId;
+    const { newListId } = req.params.listId;
     
     // Find task by taskId and update listId to new listId
-    Task.findByIdAndUpdate(taskId, {listId: listId});
+    Task.findByIdAndUpdate(taskId, {listId: newListId});
 }
+
+exports.getAllTasksByListId = async (req, res) => {
+    const { listId } = req.params.listId;
+
+    const tasks = Task.find({listId:listId});
+    res.send(tasks);
+
+}
+
+exports.getTask = async (req, res) => {
+    const { taskId } = req.params.taskId;
+
+    const task = Task.findById(taskId);
+    res.send(task);
+    
+}
+
+exports.updateTaskTitle = async (req, res) => {
+    const { taskId } = req.params.taskId;
+    const { newTitle } = req.body.title;
+
+    // Find task by taskId and update listId to new listId
+    Task.findByIdAndUpdate(taskId, {title: newTitle});
+    
+}
+
+exports.updateTaskDescription = async (req, res) => {
+    const { taskId } = req.params.taskId;
+    const { newDesc } = req.body.description;
+
+    // Find task by taskId and update listId to new listId
+    Task.findByIdAndUpdate(taskId, {description: newDesc});
+}
+
 
 /* TODO: 
         Error handling
-        Find all tasks by listId
-        Find 1 task by taskId
-        Update task description
-        Update task title*/
+*/
