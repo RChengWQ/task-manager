@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./utils/db');
+const routes = require('./utils/routes');
 
 dotenv.config();
 const app = express();
@@ -10,8 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // For parsing JSON bodies
 
-//Connect to MongoDB
+// Connect to MongoDB
 connectDB();
+
+// Import and use all feature routes under the /api path
+app.use('/api', routes);
 
 // Test route
 app.get('/', (req, res) => {
