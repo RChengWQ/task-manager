@@ -42,7 +42,7 @@ exports.updateTaskTitle = async (req, res) => {
     const { taskId } = req.params.taskId;
     const { newTitle } = req.body.title;
 
-    // Find task by taskId and update listId to new listId
+    // Find task by taskId and update title to new title
     Task.findByIdAndUpdate(taskId, {title: newTitle});
     
 }
@@ -51,7 +51,7 @@ exports.updateTaskDescription = async (req, res) => {
     const { taskId } = req.params.taskId;
     const { newDesc } = req.body.description;
 
-    // Find task by taskId and update listId to new listId
+    // Find task by taskId and update description to new description
     Task.findByIdAndUpdate(taskId, {description: newDesc});
 }
 
