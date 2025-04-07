@@ -1,4 +1,4 @@
-const Task = require('task-model');
+const Task = require('./task-model');
 const mongoose = require('mongoose');
 
 exports.createTask = async (req, res) => {
