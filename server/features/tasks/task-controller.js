@@ -1,61 +1,110 @@
 const Task = require('task-model');
+const mongoose = require('mongoose');
 
 exports.createTask = async (req, res) => {
     const {title, description, listId} = req.body;
 
-    Task.create({title, description, listId});
+    try{
+        const task = await Task.create({title, description, listId});
+        res.status(201).send(task);
+    } catch(err){
+        res.status(500).send({ error: 'Failed to create task' });
+    }
+    
 }
 
 exports.deleteTask = async (req, res) => {
     const { taskId } = req.params;
 
-    // Find task by taskId and delete the document
-    Task.findByIdAndDelete(taskId);
+    try{
+        // Find task by taskId and delete the document
+        const task = await Task.findByIdAndDelete(taskId);
+        if (!task) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).send({ message: 'Task deleted successfully' });
+    } catch(err){
+        res.status(500).send({ error: 'Failed to delete task' });
+    }
+    
 
 }
 
 exports.moveTask = async (req, res) => {
-    const { taskId } = req.params.taskId;
-    const { newListId } = req.params.listId;
+    const { taskId, newListId } = req.params;
     
-    // Find task by taskId and update listId to new listId
-    Task.findByIdAndUpdate(taskId, {listId: newListId});
+    try{
+        // Find task by taskId and update listId to new listId
+        const task = await Task.findByIdAndUpdate(taskId, {listId: newListId});
+        if(!task){
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).send({ message: 'Task moved successfully' })
+    } catch(err){
+        res.status(500).send({ error: 'Failed to move task' });
+    }
+    
 }
 
 exports.getAllTasksByListId = async (req, res) => {
-    const { listId } = req.params.listId;
+    const { listId } = req.params;
 
-    const tasks = Task.find({listId:listId});
-    res.send(tasks);
-
+    try{
+        const tasks = await Task.find({listId:listId});
+        res.status(200).send(tasks);
+    } catch(err){
+        res.status(500).send({ error: 'Failed to fetch taskss' });
+    }
+    
 }
 
 exports.getTask = async (req, res) => {
-    const { taskId } = req.params.taskId;
+    const { taskId } = req.params;
 
-    const task = Task.findById(taskId);
-    res.send(task);
+    try{
+        const task = await Task.findById({taskId});
+        if(!task){
+            return res.status(404).send({  error: 'Task not found' })
+        }
+        res.status(200).send(task);
+    } catch(err){
+        res.status(500).send({ error: 'Failed to fetch task' });
+    }
     
 }
 
 exports.updateTaskTitle = async (req, res) => {
-    const { taskId } = req.params.taskId;
-    const { newTitle } = req.body.title;
+    const { taskId } = req.params;
+    const { newTitle } = req.body;
 
-    // Find task by taskId and update title to new title
-    Task.findByIdAndUpdate(taskId, {title: newTitle});
+    try {
+        // Find task by taskId and update title to new title
+        // New is true so that modified doc is returned, rather than the original
+        const task = await Task.findByIdAndUpdate(taskId, { title: newTitle }, { new: true });
+        if (!task) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).send(task);
+    } catch (err) {
+        res.status(500).send({ error: 'Failed to update task title' });
+    }
     
 }
 
 exports.updateTaskDescription = async (req, res) => {
-    const { taskId } = req.params.taskId;
-    const { newDesc } = req.body.description;
+    const { taskId } = req.params;
+    const { newDesc } = req.body;
 
-    // Find task by taskId and update description to new description
-    Task.findByIdAndUpdate(taskId, {description: newDesc});
+    try{
+        // Find task by taskId and update description to new description
+        // New is true so that modified doc is returned, rather than the original
+        const task = await Task.findByIdAndUpdate(taskId, {description: newDesc});
+        if (!task) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).send(task);
+    } catch (err) {
+        res.status(500).send({ error: 'Failed to update task description' });
+    }
+    
 }
-
-
-/* TODO: 
-        Error handling
-*/
