@@ -35,7 +35,8 @@ exports.moveTask = async (req, res) => {
     
     try{
         // Find task by taskId and update listId to new listId
-        const task = await Task.findByIdAndUpdate(taskId, {listId: newListId});
+        // New is true so that modified doc is returned, rather than the original
+        const task = await Task.findByIdAndUpdate(taskId, {listId: newListId}, { new: true });
         if(!task){
             return res.status(404).send({ error: 'Task not found' });
         }
