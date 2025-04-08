@@ -62,7 +62,7 @@ exports.getTask = async (req, res) => {
     const { taskId } = req.params;
 
     try{
-        const task = await Task.findById({taskId});
+        const task = await Task.findById(taskId);
         if(!task){
             return res.status(404).send({  error: 'Task not found' })
         }
