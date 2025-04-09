@@ -31,16 +31,16 @@ exports.deleteTask = async (req, res) => {
 }
 
 exports.moveTask = async (req, res) => {
-    const { taskId, newListId } = req.params;
+    const { taskId, listId } = req.params;
     
     try{
         // Find task by taskId and update listId to new listId
         // New is true so that modified doc is returned, rather than the original
-        const task = await Task.findByIdAndUpdate(taskId, {listId: newListId}, { new: true });
+        const task = await Task.findByIdAndUpdate(taskId, {listId: listId}, { new: true });
         if(!task){
             return res.status(404).send({ error: 'Task not found' });
         }
-        res.status(200).send({ message: 'Task moved successfully' })
+        res.status(200).send(task)
     } catch(err){
         res.status(500).send({ error: 'Failed to move task' });
     }
@@ -54,7 +54,7 @@ exports.getAllTasksByListId = async (req, res) => {
         const tasks = await Task.find({listId:listId});
         res.status(200).send(tasks);
     } catch(err){
-        res.status(500).send({ error: 'Failed to fetch taskss' });
+        res.status(500).send({ error: 'Failed to fetch tasks' });
     }
     
 }
@@ -76,12 +76,12 @@ exports.getTask = async (req, res) => {
 
 exports.updateTaskTitle = async (req, res) => {
     const { taskId } = req.params;
-    const { newTitle } = req.body;
+    const { title } = req.body;
 
     try {
         // Find task by taskId and update title to new title
         // New is true so that modified doc is returned, rather than the original
-        const task = await Task.findByIdAndUpdate(taskId, { title: newTitle }, { new: true });
+        const task = await Task.findByIdAndUpdate(taskId, { title: title }, { new: true });
         if (!task) {
             return res.status(404).send({ error: 'Task not found' });
         }
@@ -94,12 +94,12 @@ exports.updateTaskTitle = async (req, res) => {
 
 exports.updateTaskDescription = async (req, res) => {
     const { taskId } = req.params;
-    const { newDesc } = req.body;
+    const { description } = req.body;
 
     try{
         // Find task by taskId and update description to new description
         // New is true so that modified doc is returned, rather than the original
-        const task = await Task.findByIdAndUpdate(taskId, {description: newDesc});
+        const task = await Task.findByIdAndUpdate(taskId, {description: description});
         if (!task) {
             return res.status(404).send({ error: 'Task not found' });
         }
