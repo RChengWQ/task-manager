@@ -1,0 +1,53 @@
+### NOTE:
+# This file requires the REST Client extension in Visual Studio Code to run the tests.
+
+### Variables
+@baseUrl = http://localhost:5000/api/tasks
+// List Ids to test list change
+@listId1 = 507f1f77bcf86cd799439011
+@listId2 = 507f1f77bcf86cd799439022
+
+### Create a Task 
+# @name createTask
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "title": "My First Task",
+    "description": "Complete first task",
+    "listId": "{{listId1}}"
+}
+
+###
+// Extracts the object id from the created task, to be used later
+// createTask needs to be run first to extract the id
+@taskId = {{createTask.response.body.$._id}}
+
+### Get Task by Task ID
+GET {{baseUrl}}/{{taskId}}
+
+### Get all Tasks by List ID
+GET {{baseUrl}}/list/{{listId1}}
+
+### Move Task to different List
+PATCH {{baseUrl}}/{{taskId}}/move/{{listId2}}
+
+### Update Task Title
+PATCH {{baseUrl}}/title/{{taskId}}
+Content-Type: application/json
+
+{
+    "title": "New Title"
+}
+
+### Update Task Description
+PATCH {{baseUrl}}/desc/{{taskId}}
+Content-Type: application/json
+
+{
+    "description": "New Description"
+}
+
+### Delete Task
+DELETE {{baseUrl}}/{{taskId}}
+
