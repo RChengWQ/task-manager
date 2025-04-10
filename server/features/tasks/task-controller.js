@@ -1,5 +1,4 @@
 const Task = require('./task-model');
-const mongoose = require('mongoose');
 
 exports.createTask = async (req, res) => {
     const {title, description, listId} = req.body;
